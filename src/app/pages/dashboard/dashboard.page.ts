@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { environment } from '@env/environment';
 import { RandomColor } from 'angular-randomcolor';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { ChartDataSets, ChartType } from 'chart.js';
 import { format } from 'date-fns';
-import { Color, Label } from 'ng2-charts';
+import { Color } from 'ng2-charts';
 
 export class Service {
   banner: string;
@@ -61,9 +61,10 @@ export class DashboardPage {
   min_service !: Service;
   num_service !: string;
 
-  max_user !: User;
-  min_user !: User;
-  num_user !: string;
+
+  total_star !: string;
+  position !: string;
+  total_user!: string;
 
   range = new FormGroup({
     start: new FormControl(new Date(new Date().getTime() - 7 * 86400000)),
@@ -80,21 +81,8 @@ export class DashboardPage {
     end: new FormControl(new Date(new Date().getTime() - 86400000))
   });
 
-  barChartLabels: Label[] = ['Tổng vệ sinh', 'Giặt ủi', 'Dọn vườn', 'Dọn nhà'];
-  barChartType: ChartType = 'bar';
-  barChartLegend = true;
-  barChartPlugins = [];
-  barChartColors: Color[] = [{
-    backgroundColor: "#fca5a5",
-    borderColor: "#fca5a5",
-  }];
-
-  barChartData: ChartDataSets[] = [
-    { barPercentage: 0.3, data: [45, 37, 60, 70, 46, 33], label: 'Best Fruits' }
-  ];
-
-  public bubbleChartType: ChartType = 'bubble';
-  public bubbleChartLegend = true;
+  public lineChartDataEmployee: ChartDataSets[] = [{ data: [0.2, 1, 2, 0.2, 1, 2, 0.2, 1, 5] },];
+  public lineChartLabelsEmployee: any = ['06/03', '06/04', '06/05', '06/06', '06/07', '06/08', '06/09', '06/10'];
 
   constructor(private http: HttpClient) {
   }
@@ -154,27 +142,6 @@ export class DashboardPage {
   ];
 
 
-  barChartOptions: ChartOptions = {
-    responsive: true,
-    legend: {
-      display: false
-    },
-    elements: {
-      line: {
-        tension: 0
-      }
-    },
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          stepSize: 5
-        }
-      }],
-
-    },
-    maintainAspectRatio: false,
-  };
 
   getTaskOverview() {
     const start = format(this.range.get('start')?.value, "yyyy-MM-dd");
@@ -183,7 +150,7 @@ export class DashboardPage {
     let params = new HttpParams()
       .set('start_date', start)
       .set('end_date', end);
-    this.http.get(environment.apiUrl + "/task/overview", { params: params }).subscribe((data: any) => {
+    this.http.get(environment.apiUrl + "/task/overview/employee", { params: params }).subscribe((data: any) => {
       this.num_cancel = data.data.num_cancel;
       this.num_create = data.data.num_create;
       this.num_done = data.data.num_done;
@@ -209,7 +176,7 @@ export class DashboardPage {
     let params = new HttpParams()
       .set('start_date', start)
       .set('end_date', end);
-    this.http.get(environment.apiUrl + "/task/overview/detail", { params: params }).subscribe((data: any) => {
+    this.http.get(environment.apiUrl + "/task/overview/employee/detail", { params: params }).subscribe((data: any) => {
       const taskOnDate = data.data;
       const dataSet = new Array();
       const dateSet = new Array();
@@ -229,7 +196,7 @@ export class DashboardPage {
     let params = new HttpParams()
       .set('start_date', start)
       .set('end_date', end);
-    this.http.get(environment.apiUrl + "/service/overview", { params: params }).subscribe((data: any) => {
+    this.http.get(environment.apiUrl + "/service/overview/employee", { params: params }).subscribe((data: any) => {
       console.log(data);
 
       this.num_service = data.data.num_service;
@@ -271,7 +238,7 @@ export class DashboardPage {
     let params = new HttpParams()
       .set('start_date', start)
       .set('end_date', end);
-    this.http.get(environment.apiUrl + "/service/overview/detail", { params: params }).subscribe((data: any) => {
+    this.http.get(environment.apiUrl + "/service/overview/employee/detail", { params: params }).subscribe((data: any) => {
       console.log(data);
 
       const dateSet = new Array();
@@ -311,25 +278,41 @@ export class DashboardPage {
     let params = new HttpParams()
       .set('start_date', start)
       .set('end_date', end);
-    this.http.get(environment.apiUrl + "/user/overview", { params: params }).subscribe((data: any) => {
-      console.log(data);
-
+    this.http.get(environment.apiUrl + "/user/overview/employee", { params: params }).subscribe((data: any) => {
+      this.total_star = data.data.total_star;
+      this.total_user = data.data.total_feed_user;
+      this.position = data.data.position;
       const details = data.data.details;
-      const labels = new Array();
-      const datasSet = [];
+      const dataSet = new Array();
+      const dateSet = new Array();
       for (let i = 0; i < details.length; i++) {
-        labels.push(details[i].full_name);
-        datasSet.push(details[i].num_star);
-
-        this.max_user = new User(data.data.max_user.avatar , data.data.max_user.full_name, data.data.max_user.num_star);
-
-        this.min_user = new User(data.data.min_user.avatar, data.data.min_user.full_name, data.data.min_user.num_star);
-
-        this.num_user = data.data.num_of_user;
+        dataSet.push(details[i].number);
+        dateSet.push(details[i].date)
       }
-      const barChartDataUser = [{ barPercentage: 0.3, data: datasSet, label: 'Số sao' }];
-      this.barChartData = barChartDataUser;
-      this.barChartLabels = labels;
+      this.lineChartDataEmployee = [{ data: dataSet }]
+      this.lineChartLabelsEmployee = dateSet;
+
+    })
+  }
+
+  getUserOverviewDetail() {
+    const start = format(this.campaignThree.get('start')?.value, "yyyy-MM-dd");
+    const end = format(this.campaignThree.get('end')?.value, "yyyy-MM-dd");
+
+    let params = new HttpParams()
+      .set('start_date', start)
+      .set('end_date', end);
+    this.http.get(environment.apiUrl + "/user/overview/employee/detail", { params: params }).subscribe((data: any) => {
+      const details = data.data;
+      const dataSet = new Array();
+      const dateSet = new Array();
+      for (let i = 0; i < details.length; i++) {
+        dataSet.push(details[i].number);
+        dateSet.push(details[i].date)
+      }
+      this.lineChartDataEmployee = [{ data: dataSet }]
+      this.lineChartLabelsEmployee = dateSet;
+
     })
   }
 }

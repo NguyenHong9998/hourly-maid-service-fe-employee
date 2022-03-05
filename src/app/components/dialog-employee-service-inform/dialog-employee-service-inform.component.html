@@ -1,5 +1,5 @@
 <h1 mat-dialog-title class="text-center">
-    Đánh giá mức kinh nghiệm
+    {{ service_name }}
 </h1>
 
 <div class="hidden sm:block" aria-hidden="true">
@@ -7,57 +7,65 @@
 </div>
 
 <div class="example-container ">
-    <table mat-table [dataSource]="dataSource">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" *ngIf="dataSource?.data?.length">
+
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
                 text-xs text-gray-900
-                uppercase tracking-wider"> Dịch vụ
+                uppercase tracking-wider" mat-sort-header="name"> Nhân viên
             </th>
             <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
                 element">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 h-10 w-10">
-                        <img class="h-10 w-10 rounded-full" [src]="element.banner" alt="">
+                        <img class="h-10 w-10 rounded-full" [src]="element.avatar" alt="">
                     </div>
                     <div class="ml-4">
                         <div class="text-sm font-medium
                             text-gray-900">
-                            {{element.service_name}}
+                            {{element.name}}
                         </div>
+
                     </div>
                 </div>
             </td>
         </ng-container>
+
+
         <ng-container matColumnDef="level">
             <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
                 text-xs text-gray-900
-                uppercase tracking-wider"> Mức kinh
+                uppercase tracking-wider" mat-sort-header="level"> Mức kinh
                 nghiệm
             </th>
             <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
                 element">
+                <!-- <div class="flex">
+                    <div *ngFor="let star of stars">
+                        <mat-icon *ngIf="stars.indexOf(star) < element.level" class="star">star</mat-icon>
+                    </div>
+                </div> -->
                 <div class="flex items-center space-x-5">
-                    <app-star-rating [rating]="element.level" [starCount]="5"
-                        (ratingUpdated)="onRatingChanged($event, element.id)"></app-star-rating>
+                    <app-star-rating [rating]="element.level" [starCount]="5"></app-star-rating>
                 </div>
+
             </td>
         </ng-container>
-        <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
-                text-xs text-gray-900
-                uppercase tracking-wider">
-            </th>
-            <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
-                element">
-                <button mat-icon-button (click)="deleteRow(element.id)">
-                    <mat-icon class="white-icon">delete</mat-icon>
-                </button>
-            </td>
-        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky :true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-    </table>
 
+    </table>
+    <div class="bg-red-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mt-4" role="alert" *ngIf="!dataSource?.data?.length">
+        <div class="flex">
+          <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+          <div>
+            <p class="font-bold">Không tìm thấy dữ liệu</p>
+            <p class="text-sm">Chưa có nhân viên nào đánh giá kinh nghiệm theo dịch vụ này</p>
+          </div>
+        </div>
+      </div>
+    
 </div>
 <div class="hidden sm:block" aria-hidden="true">
     <div class="border-t border-gray-200"></div>
@@ -66,11 +74,5 @@
     <button mat-button mat-dialog-close class="bg-blue-500 hover:bg-blue-700
             text-white font-bold py-2 px-4 border border-blue-700 rounded">
         Thoát
-    </button>
-    <button class="bg-transparent hover:bg-blue-500 text-blue-700
-        font-semibold hover:text-white py-2 px-4 border
-        border-blue-500
-        hover:border-transparent rounded" id="saveButton" (click)="onSave()">
-        Lưu
     </button>
 </mat-dialog-actions>

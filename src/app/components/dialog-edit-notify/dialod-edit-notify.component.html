@@ -23,7 +23,7 @@
                                     border
                                     rounded-md focus:border-blue-400
                                     focus:outline-none focus:ring-1
-                                    focus:ring-blue-600" formControlName="title" [disabled]="status == 'Đã gửi'">
+                                    focus:ring-blue-600" formControlName="title" [attr.disabled]="true">
                             </div>
                         </div>
                     </div>
@@ -36,35 +36,21 @@
                             <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500
                                 focus:border-indigo-500 mt-1 block
                                 w-full sm:text-sm border border-gray-300 py-2 px-4
-                                rounded-md" formControlName="content" [disabled]="status == 'Đã gửi'"></textarea>
+                                rounded-md" formControlName="content" [attr.disabled] ="true"></textarea>
                         </div>
 
                     </div>
                     <div class="grid grid-cols-2 gap-5">
+                        
                         <div>
-                            <label for="about" class="block text-sm
-                            font-medium text-gray-700 pb-3">
-                                Đối tượng nhận thông báo:
-                            </label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Người nhận</mat-label>
-                                <mat-select name="type" [(value)]="selectedType">
-                                    <mat-option *ngFor="let type of types" [value]="type.name" [disabled]="status =='Đã gửi'">
-                                        {{type.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="ml-5" *ngIf="status == 'Đã gửi'">
-                            <label for="about" class="block text-sm
-                            font-medium text-gray-700 pb-3">
-                                Thời gian gửi:
-                            </label>
-                            <div class=" w-full h-full">
-                                <span class="pt-4 inline-block align-middle">{{date}}</span>
-                            </div>
-                        </div>
+                           
+                            <p class="mt-2 flex items-center text-sm text-gray-500">
+                              <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                              </svg>
+                              Hoàn thành lúc {{date |  date : 'dd-MM-yyyy HH:mm:ss'}}
+                            </p>
+                          </div>
                     </div>
 
                 </div>

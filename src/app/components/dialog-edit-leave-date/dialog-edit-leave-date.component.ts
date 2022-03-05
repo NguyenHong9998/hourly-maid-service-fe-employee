@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Employee, LeaveDate } from '@components/dialog-create-leave-date/dialog-create-leave-date.component';
 import { environment } from '@env/environment';
 import { CustomSnackbarService } from '@pages/auth/services/custom-snackbar.service';
+import { TokenStorageService } from '@pages/auth/services/token-storage.service';
 import { addDays, compareAsc, format } from 'date-fns';
 
 @Component({
@@ -29,12 +30,14 @@ export class DialogEditLeaveDateComponent implements OnInit {
 
   userAvatar !: string;
   userName !: string;
+  currentUser !: number;
 
   constructor(public dialogRef: MatDialogRef<DialogEditLeaveDateComponent>, private formBuilder: FormBuilder,
-    private http: HttpClient, private customSnackBar: CustomSnackbarService, @Inject(MAT_DIALOG_DATA) public data: any
+    private http: HttpClient, private customSnackBar: CustomSnackbarService, @Inject(MAT_DIALOG_DATA) public data: any, private storageService : TokenStorageService
   ) {
     this.row = this.getListLeaveDate(this.range.controls.start.value, this.range.controls.end.value);
     this.dataSource = new MatTableDataSource<LeaveDate>(this.row);
+    this.currentUser = storageService.getUser().user_id;
 
   }
 

@@ -2,10 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { DialogCancelTaskComponent } from '@components/dialog-cancel-task/dialog-cancel-task.component';
 import { PriceList } from '@components/dialog-create-task/dialog-create-task.component';
 import { ListSelectServiceTaskDomain } from '@components/dialog-create-task/service-list-domain';
+import { DialogFeedbackOfEmployeeComponent } from '@components/dialog-feedback-of-employee/dialog-feedback-of-employee.component';
 import { environment } from '@env/environment';
 import { CustomSnackbarService } from '@pages/auth/services/custom-snackbar.service';
 import { format } from 'date-fns';
@@ -28,8 +30,18 @@ export class Employee {
     this.employeeEmail = employeeEmail;
     this.employeePhone = employeePhone;
   }
+}
 
+export class TaskProgress {
+  status: string;
+  time: string;
+  index: number;
 
+  constructor(index: number, status: string, time: string) {
+    this.status = status;
+    this.time = time;
+    this.index = index;
+  }
 }
 @Component({
   selector: 'app-dialog-task-detail',
@@ -48,6 +60,7 @@ export class DialogTaskDetailComponent implements OnInit {
   note = "";
   validTime: boolean = true;
   minDate = new Date();
+  progress !: Array<any>;
 
   service = new FormControl();
   employee = new FormControl();
@@ -68,7 +81,7 @@ export class DialogTaskDetailComponent implements OnInit {
   status !: string;
   constructor(public dialogRef: MatDialogRef<DialogTaskDetailComponent>,
     private formBuilder: FormBuilder, public http: HttpClient,
-    private customSnackBar: CustomSnackbarService, @Inject(MAT_DIALOG_DATA) public data: any
+    private customSnackBar: CustomSnackbarService, @Inject(MAT_DIALOG_DATA) public data: any, private dialog: MatDialog
   ) {
     this.status = data.status;
   }
@@ -154,6 +167,13 @@ export class DialogTaskDetailComponent implements OnInit {
         this.getListEmployee();
       }
 
+      const progressList = new Array<TaskProgress>();
+      for (let i = 0; i < data.data.progress.length; i++) {
+        const status = data.data.progress[i].status;
+        const time = data.data.progress[i].time;
+        progressList.push(new TaskProgress(i, status, time == null ? "" : time));
+      }
+      this.progress = progressList;
     })
   }
 
@@ -210,5 +230,22 @@ export class DialogTaskDetailComponent implements OnInit {
     })
   }
 
+  OpenDiaLogFeedbackOfUser(employeeId: any, elementName: any) {
+    const data = { employeeId, elementName }
+    const dialogRef = this.dialog.open(DialogFeedbackOfEmployeeComponent, { data });
+    dialogRef.afterClosed().subscribe(() => {
+    })
+  }
+
+  cancelTask() {
+    const taskId = this.data.taskId;
+    const data = { taskId };
+    const dialogRef = this.dialog.open(DialogCancelTaskComponent, { data });
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data.isChange) {
+        this.dialogRef.close();
+      }
+    })
+  }
 
 }

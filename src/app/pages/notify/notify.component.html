@@ -4,29 +4,7 @@
             Danh sách thông báo
         </h2>
     </div>
-    <div class="h-32 md:h-auto md:w-2/3 ">
-        <a href="/notify/list" matTooltip="Tải lại trang" mat-stroked-button class="btn-white btn-square bg-white ml-4">
-            <mat-icon>sync</mat-icon>
-        </a>
-
-        <button matTooltip="Thêm mới thông báo" id="addButton" (click)="openDialogCreateNotify()" mat-stroked-button
-            class="btn-white btn-square bg-white ml-4">
-            <mat-icon>playlist_add</mat-icon>
-        </button>
-
-        <button matTooltip="Xóa thông báo" [disabled]="!selection.hasValue()" mat-stroked-button id="deleteButton"
-            class="btn-white btn-square bg-white ml-3.5" (click) = "deleteNotify()">
-            <mat-icon>delete_outline</mat-icon>
-        </button>
-
-        <mat-button-toggle-group [(ngModel)]="status" class="ml-5" (change)="onFilter()">
-            <mat-button-toggle value="Đã gửi">Đã gửi</mat-button-toggle>
-            <mat-button-toggle value="Đã tạo">Đã tạo</mat-button-toggle>
-            <mat-button-toggle value="Tất cả" >Tất cả</mat-button-toggle>
-        </mat-button-toggle-group>
-
-
-    </div>
+    
     <div class="flex justify-center h-2/4 pt-1">
         <div class="flex border-2 rounded">
             <input type="text" class="px-4 py-2 w-80" placeholder="Tìm kiếm...." [formControl]="keySearch" (keyup.enter)="onSearch()">
@@ -44,102 +22,51 @@
     </div>
 
 
-
 </div>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
-    <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)">
-            </mat-checkbox>
-        </td>
-    </ng-container>
 
-    <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
-            text-xs text-gray-900
-            uppercase tracking-wider" mat-sort-header="title"> Chủ đề
-        </th>
-        <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
-            element">
-            <div class="flex items-center">
-
-                <div class="ml-4">
-                    <div class="text-sm font-medium
-                        text-gray-900">
-                        {{element.title}}
-                    </div>
+<div class="bg-white shadow overflow-hidden ">
+    <ul role="list" class="divide-y divide-gray-200">
+      <li *ngFor="let item of notifyList">
+        <a (click) = "openDialogEditNotify(item.id)" class="block hover:bg-gray-50">
+          <div class="flex items-center px-4 py-4 sm:px-6">
+            <div class="min-w-0 flex-1 flex items-center">
+              
+              <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                <div>
+                  <p class="text-sm font-medium text-indigo-600 truncate">{{item.title}}</p>
+                  <p class="mt-2 flex items-center text-sm text-gray-500">
+                   
+                    <span class="truncate">{{item.content}}</span>
+                  </p>
                 </div>
+                <div class="hidden md:block">
+                  <div>
+                    <p class="text-sm text-gray-900">
+                      <time datetime="2020-01-07"> Ngày {{item.date}}</time>
+                    </p>
+                    <p class="mt-2 flex items-center text-sm text-gray-500">
+                      <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                      </svg>
+                      Hoàn thành lúc {{item.time}}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="content">
-        <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
-            text-xs text-gray-900
-            uppercase tracking-wider" mat-sort-header="content"> Nội dụng
-        </th>
-        <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
-            element">
-            <div class="text-sm text-gray-900 flex">
-                <span class="pl-1">
-                    {{element.content}}
-                </span>
+            <div>
+              <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+              </svg>
             </div>
-        </td>
-    </ng-container>
-
-    <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
-            text-xs text-gray-900
-            uppercase tracking-wider" mat-sort-header="type"> Đối tượng
-        </th>
-        <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
-            element">
-            <div class="text-sm text-gray-900">{{element.type}}</div>
-        </td>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
-            text-xs text-gray-900
-            uppercase tracking-wider" mat-sort-header="status"> Trạng thái
-        </th>
-        <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
-            element">
-            <span class="{{element.status == 'Đã tạo' ? 'px-2
-                inline-flex
-                text-xs
-                leading-5 font-semibold rounded-full
-                bg-green-100 text-green-800' : 'px-2 inline-flex text-xs
-                leading-5 font-semibold rounded-full
-                bg-red-200 text-green-800' }}" (click) = "openChangeStatusNotify(element.id, element.status)">
-                {{element.status}}
-            </span>
-        </td>
-    </ng-container>
-
-
-    <ng-container matColumnDef="detail">
-        <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
-            text-xs text-gray-900
-            uppercase tracking-wider">Chi tiết</th>
-        <td mat-cell *matCellDef="let element">
-            <button mat-icon-button (click)="openDialogEditNotify(element.id,
-                element.status)">
-                <mat-icon class="white-icon">edit</mat-icon>
-            </button>
-        </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-    </tr>
-</table>
+          </div>
+        </a>
+      </li>
+  
+    </ul>
+  </div>
+  
 
 <mat-paginator (page)="onPaging($event)" [length]="totalRow" [pageSizeOptions]="arrayPageSize" [showFirstLastButtons]="true">
 </mat-paginator>

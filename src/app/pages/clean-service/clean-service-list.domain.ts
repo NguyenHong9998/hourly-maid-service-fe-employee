@@ -6,8 +6,9 @@ export class CleanServiceListDomain {
     price: string;
     note: string;
     createDate: string;
+    status : string;
 
-    constructor(id: number, position: number, name: string, banner: string, price: string, note: string, createDate: string) {
+    constructor(id: number, position: number, name: string, banner: string, price: string, note: string, createDate: string, status : string) {
         this.id = id;
         this.position = position;
         this.name = name;
@@ -15,6 +16,7 @@ export class CleanServiceListDomain {
         this.price = price;
         this.note = note;
         this.createDate = createDate;
+        this.status = status;
     }
 
 }

@@ -1,23 +1,26 @@
 <div class="flex">
     <div class="flex flex-col w-60 h-screen pr-4  border-r">
         <div class="flex flex-col justify-between mt-6">
-            <button (click)="openDialogCreateTask()"
+            <!-- <button (click)="openDialogCreateTask()"
                 class="flex bg-transparent bg-blue-200 hover:bg-blue-500 text-blue-700  hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                 <mat-icon>playlist_add</mat-icon>
                 <span class="pl-2">Tạo công việc</span>
 
+            </button> -->
+            <div class="pt-10" *ngIf="orangeDatesArray && orangeDatesArray.length">
+                <highlighted-work-dates [orangeDatesArray]="orangeDatesArray" [redDatesArray]="redDatesArray"
+                    (dateChange)="currentSelectedDate=$event"></highlighted-work-dates>
+            </div>
+            
+            <div class="flex py-4">
+                <div class="w-5 h-5 " id="noteCalendar"> </div>
+                <span class="text-sm ml-3">Ngày có việc làm</span>
+            </div>
+
+            <button (click)="getListTasks()"
+                class="bg-transparent hover:bg-blue-500 mt-3 text-blue-700  hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                Hiển thị danh sách
             </button>
-
-            <mat-selection-list #selectStatus [multiple]="false" [(ngModel)]="selectedStatus"
-                (ngModelChange)="onSelectStatusChange($event)">
-                <mat-list-option *ngFor="let item of statusList" [value]="item.name"
-                    class="flex bg-transparent hover:bg-blue-500 mt-3 text-blue-700  hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                    <mat-icon mat-list-icon>{{item.icon}}</mat-icon>
-                    <div mat-line>{{item.name}}</div>
-
-                </mat-list-option>
-            </mat-selection-list>
-
         </div>
     </div>
     <div class="w-full h-full ml-6 mr-6 overflow-y-auto">
@@ -26,18 +29,7 @@
             <h2 class="text-lg font-extrabold text-3xl text-gray-900">
                 Danh sách công việc
             </h2>
-            <div class="ml-6">
-                <a href="/task/list" matTooltip="Tải lại trang" mat-stroked-button
-                    class="btn-white btn-square bg-white">
-                    <mat-icon>sync</mat-icon>
-                </a>
 
-                <button matTooltip="Xóa công việc" [disabled]="!selection.hasValue()" mat-stroked-button
-                    class="btn-white btn-square bg-white ml-3.5s" id="deleteButton" (click)="deleteTask()">
-                    <mat-icon>delete_outline</mat-icon>
-                </button>
-            </div>
-            <!-- [formControl]="keySearch" (keyup.enter)="onSearch()" -->
             <div class="flex justify-center h-2/4 ml-4">
                 <div class="flex border-2 rounded">
                     <input type="text" class="px-4 py-2 w-80" placeholder="Tìm kiếm..." [formControl]="keySearch"
@@ -54,8 +46,23 @@
                         </svg>
                     </button>
                 </div>
+               
             </div>
 
+        </div>
+        <div class="bg-red-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mt-4 mb-3" role="alert"
+            *ngIf="!taskList?.length">
+            <div class="flex">
+                <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path
+                            d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                    </svg></div>
+                <div>
+                    <p class="font-bold">Không tìm thấy dữ liệu</p>
+                    <p class="text-sm">Không có nhân viên nào nghỉ trong thời gian này</p>
+                </div>
+            </div>
         </div>
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
@@ -178,13 +185,14 @@
                         <span>
                             <button mat-menu-item (click)="openDialogEditTask(element.id, element.status)">
                                 <mat-icon>edit</mat-icon>
-                                <span class="text-sm text-gray-700">Chỉnh sửa thông tin</span>
+                                <span class="text-sm text-gray-700">Xem thông tin</span>
                             </button>
-                            <button mat-menu-item *ngIf="element.status == 'Đã giao NV'" (click) = "doneTask(element.id, element.status)">
+                            <button mat-menu-item *ngIf="element.status == 'Đã giao NV'"
+                                (click)="doneTask(element.id, element.status)">
                                 <mat-icon>done_all</mat-icon>
                                 <span class="text-sm text-gray-700">Đánh dấu hoàn thành</span>
                             </button>
-                            <button mat-menu-item (click) = "cancelTask(element.id, element.status)">
+                            <button mat-menu-item (click)="cancelTask(element.id, element.status)" *ngIf="element.status != 'Hoàn thành'">
                                 <mat-icon>clear</mat-icon>
                                 <span class="text-sm text-gray-700">Huỷ công việc</span>
                             </button>

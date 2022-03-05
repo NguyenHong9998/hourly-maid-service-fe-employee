@@ -21,3 +21,19 @@ table {
 mat-list-option[aria-selected="true"] {
     background: rgba(0, 139, 139, 0.7);
   }
+
+  .example-custom-date--orange-class {
+    background: orange ;
+    border-radius: 100%;
+    padding : 2px;
+  }
+  
+  .example-custom-date--red-class {
+    background: red !important;
+    border-radius: 100%;
+  }
+  
+  #noteCalendar { 
+    background: orange;
+  }
+  

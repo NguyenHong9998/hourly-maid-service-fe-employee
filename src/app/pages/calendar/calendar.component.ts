@@ -146,9 +146,7 @@ export class CalendarsComponent implements OnInit {
   openDialogCreateLeaveDate() {
     const dialogRef = this.dialog.open(DialogCreateLeaveDateComponent);
     dialogRef.afterClosed().subscribe(() => {
-      this.getListLeaveDate();
-      this.getListDateHasLeaveDate();
-
+      window.location.reload();
     });
   }
 

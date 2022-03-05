@@ -4,32 +4,7 @@
             Chương trình giảm giá
         </h2>
     </div>
-    <div class="h-32 md:h-auto md:w-2/3">
-        <a
-            href="/discount/list"
-            matTooltip="Tải lại trang"
-            mat-stroked-button
-            class="btn-white btn-square bg-white ml-4">
-            <mat-icon>sync</mat-icon>
-        </a>
-
-        <button
-            matTooltip="Thêm mới dịch vụ"
-            id="addButton"
-            (click)="openDialogCreateDiscountService()"
-            mat-stroked-button
-            class="btn-white btn-square bg-white ml-4">
-            <mat-icon>playlist_add</mat-icon>
-        </button>
-
-        <button
-            matTooltip="Xóa dịch vụ"
-            [disabled]="!selection.hasValue()"
-            mat-stroked-button
-            id="deleteButton"
-            class="btn-white btn-square bg-white ml-3.5">
-            <mat-icon>delete_outline</mat-icon> </button>
-    </div>
+        
     <div class="flex justify-center h-2/4">
         <div class="flex border-2 rounded">
             <input type="text" class="px-4 py-2 w-80" placeholder="Tìm kiếm...." [formControl]="keySearch" (keyup.enter)="onSearch()">
@@ -57,13 +32,13 @@
         <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? masterToggle() : null"
                 [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [disabled] ="true">
             </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()"
                 (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)">
+                [checked]="selection.isSelected(row)" [disabled] ="true">
             </mat-checkbox>
         </td>
     </ng-container>
@@ -128,7 +103,7 @@
                 leading-5 font-semibold rounded-full
                 bg-green-100 text-green-800' : 'px-2 inline-flex text-xs
                 leading-5 font-semibold rounded-full
-                bg-red-200 text-green-800' }}" (click) = "openChangeStatusDiscount(element.id, element.status, element.startDate, element.endDate)">
+                bg-red-200 text-green-800' }}" >
                 {{element.status}}
             </span>
         </td>

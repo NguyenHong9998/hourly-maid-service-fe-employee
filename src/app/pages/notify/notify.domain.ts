@@ -1,23 +1,21 @@
 export class NotifyListDomain {
     id: number;
-    position: number;
     title: string;
     content: string;
-    type: string;
-    status: string;
+    date: string;
+    time : string;
 
     constructor(id: number,
-        position: number,
         title: string,
         content: string,
-        type: string,
-        status: string
+        date: string,
+        time : string
+    
     ) {
         this.id = id;
-        this.position = position;
+        this.date = date;
         this.title = title;
         this.content = content;
-        this.type = type;
-        this.status = status;
+        this.time = time;
     }
 }

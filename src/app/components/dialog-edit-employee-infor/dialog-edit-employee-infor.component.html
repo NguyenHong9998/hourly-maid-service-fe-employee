@@ -17,7 +17,7 @@
                                 <div class="flex-shrink-0 h-56 w-56">
                                     <img class="h-56 w-56 rounded-full" [src]="avatar" alt="User avatar">
                                     <input #fileInput type="file" (change)="onFileChange($event)"
-                                        (click)="fileInput.value= ''" hidden accept="image/jpge,
+                                        (click)="fileInput.value= ''" hidden accept="image/jpeg,
                                          image/png">
                                 </div>
                             </div>
@@ -31,14 +31,14 @@
                                          pt-3">
                                         <input type="radio" class="form-radio" [checked]="role ==
                                              'MANAGER'" name="accountType" (change)="onRoleChange($event)"
-                                            value="Quản lý">
+                                            value="Quản lý" [attr.disabled]="true">
                                         <span class="ml-2">Quản lý</span>
                                     </label>
                                     <label class="inline-flex items-center
                                          ml-6 pt-3">
                                         <input type="radio" class="form-radio" [checked]="role ===
                                              'EMPLOYEE'" name="accountType" (change)="onRoleChange($event)"
-                                            value="Nhân viên">
+                                            value="Nhân viên" [attr.disabled]="true">
                                         <span class="ml-2">Nhân viên</span>
                                     </label>
 
@@ -55,40 +55,13 @@
                                     </span>
                                 </div>
                                 <br>
-                                <button type="button" class="ml-5 bg-white
-                                     py-2 px-3 border border-gray-300
-                                     rounded-md shadow-sm text-sm leading-4
-                                     font-medium text-gray-700
-                                     hover:bg-gray-50 focus:outline-none
-                                     focus:ring-2 focus:ring-offset-2
-                                     focus:ring-indigo-500" (click)='fileInput.click()'>
-                                    Đổi ảnh
-                                </button>
-                                <button type="button" class="ml-5 bg-white
-                                     py-2 px-3 border border-gray-300
-                                     rounded-md shadow-sm text-sm leading-4
-                                     font-medium text-gray-700
-                                     hover:bg-gray-50 focus:outline-none
-                                     focus:ring-2 focus:ring-offset-2
-                                     focus:ring-indigo-500" (click)='onRemoveAvatar()'>
-                                    Xóa ảnh
-                                </button>
+                               
                             </div>
 
                         </div>
 
                     </div>
-                    <div class="px-4 py-1 bg-gray-50 text-right sm:px-6">
-                        <button (click)="saveCommonInform()" type="submit" class="inline-flex
-                             justify-center py-1 px-4 border
-                             border-transparent shadow-sm text-sm font-medium
-                             rounded-md text-white bg-indigo-600
-                             hover:bg-indigo-700 focus:outline-none
-                             focus:ring-2 focus:ring-offset-2
-                             focus:ring-indigo-500">
-                            Lưu
-                        </button>
-                    </div>
+                    
                 </div>
             </form>
         </div>
@@ -108,11 +81,11 @@
                                 <label for="first-name" class="block
                                      leading-6 text-sm font-bold
                                      text-gray-900">Họ và tên</label>
-                                <input formControlName="name" type="text" name="first-name" id="first-name"
+                                <input formControlName="name" type="text" name="first-name" id="in"
                                     autocomplete="given-name" class="w-full px-4 py-2 text-sm border
                                      rounded-md focus:border-blue-400
                                      focus:outline-none focus:ring-1
-                                     focus:ring-blue-600">
+                                     focus:ring-blue-600" [attr.disabled]="true">
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="last-name" class="block text-sm
@@ -120,30 +93,30 @@
                                 <label class="inline-flex items-center
                                      pt-3">
                                     <input type="radio" class="form-radio" name="accountType" value="Nam"
-                                        checked="gender == 'Nam'" (change)="onItemChange($event)">
+                                        checked="gender == 'Nam'" (change)="onItemChange($event)" [disabled]="true">
                                     <span class="ml-2">Nam</span>
                                 </label>
                                 <label class="inline-flex items-center
                                      ml-6">
                                     <input type="radio" class="form-radio" name="accountType" value="Nữ"
-                                        (change)="onItemChange($event)" checked="gender == 'Nữ'">
+                                        (change)="onItemChange($event)" checked="gender == 'Nữ'" [disabled]="true">
                                     <span class="ml-2">Nữ</span>
                                 </label>
                                 <label class="inline-flex items-center
                                      ml-6">
                                     <input type="radio" class="form-radio" name="accountType" value="Khác"
-                                        (change)="onItemChange($event)" checked="gender == 'Khác'">
+                                        (change)="onItemChange($event)" checked="gender == 'Khác'" [disabled]="true">
                                     <span class="ml-2">Khác</span>
                                 </label>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="email-address" class="block
                                      text-sm font-bold text-gray-700">Email</label>
-                                <input formControlName="email" type="text" name="email-address" id="email-address"
+                                <input formControlName="email" type="text" name="email-address" id="in"
                                     autocomplete="email" class="w-full px-4 py-2 text-sm border
                                      rounded-md focus:border-blue-400
                                      focus:outline-none focus:ring-1
-                                     focus:ring-blue-600">
+                                     focus:ring-blue-600" [attr.disabled]="true">
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="country" class="block text-sm
@@ -160,45 +133,35 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="city" class="block text-sm
                                      font-bold text-gray-700">Số điện thoại</label>
-                                <input type="text" name="city" id="city" formControlName="phone"
+                                <input type="text" name="city" id="in" formControlName="phone"
                                     autocomplete="address-level2" class="w-full px-4 py-2 text-sm border
                                      rounded-md focus:border-blue-400
                                      focus:outline-none focus:ring-1
-                                     focus:ring-blue-600">
+                                     focus:ring-blue-600" [attr.disabled]="true">
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="region" class="block text-sm
                                      font-bold text-gray-700">Số CCCD</label>
-                                <input type="text" name="region" id="region" formControlName="idCard"
+                                <input type="text" name="region" id="in" formControlName="idCard"
                                     autocomplete="address-level1" class="w-full px-4 py-2 text-sm border
                                      rounded-md focus:border-blue-400
                                      focus:outline-none focus:ring-1
-                                     focus:ring-blue-600">
+                                     focus:ring-blue-600" [attr.disabled]="true">
                             </div>
 
                             <div class="col-span-6">
                                 <label for="street-address" class="block
                                      text-sm font-bold text-gray-700">Địa chỉ</label>
-                                <input type="text" name="street-address" id="street-address" formControlName="address"
+                                <input type="text" name="street-address" id="in" formControlName="address"
                                     autocomplete="street-address" class="w-full px-4 py-2 text-sm border
                                      rounded-md focus:border-blue-400
                                      focus:outline-none focus:ring-1
-                                     focus:ring-blue-600">
+                                     focus:ring-blue-600" [attr.disabled]="true">
                             </div>
 
                         </div>
                     </div>
-                    <div class="px-4 py-1 bg-gray-50 text-right sm:px-6">
-                        <button (click)="saveUserPersonalInform()" type="submit" class="inline-flex
-                             justify-center py-1 px-4 border
-                             border-transparent shadow-sm text-sm font-medium
-                             rounded-md text-white bg-indigo-600
-                             hover:bg-indigo-700 focus:outline-none
-                             focus:ring-2 focus:ring-offset-2
-                             focus:ring-indigo-500">
-                            Lưu
-                        </button>
-                    </div>
+                    
                 </div>
             </form>
         </div>

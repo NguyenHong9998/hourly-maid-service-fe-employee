@@ -1,46 +1,28 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
-<div class="px-4 pt-6 sm:px-6 flex flex-col md:flex-row">
-    <div class="h-32 md:h-auto md:w-1/2">
+<div class="px-4 pt-6 sm:px-6 flex ">
+    <div class="h-32 md:h-auto md:w-2/5">
         <h2 class="text-lg font-extrabold text-3xl text-gray-900">
             Danh sách dịch vụ
         </h2>
-    </div>
-    <div class="h-32 md:h-auto md:w-2/3">
-        <a
-            href="/service/list"
-            matTooltip="Tải lại trang"
-            mat-stroked-button
-            class="btn-white btn-square bg-white ml-4">
-            <mat-icon>sync</mat-icon>
-        </a>
 
-        <button
-            matTooltip="Thêm mới dịch vụ"
-            id="addButton"
-            (click)="openDialogCreateService()"
-            mat-stroked-button
-            class="btn-white btn-square bg-white ml-4">
-            <mat-icon>playlist_add</mat-icon>
+
+    </div>
+
+    <div class="h-32 md:h-auto md:w-1/4">
+        <button (click)="setExperence()"
+            class="bg-transparent hover:bg-blue-500 text-blue-700  hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+            Đánh giá mức kinh nghiệm
         </button>
-
-        <button
-            matTooltip="Xóa dịch vụ"
-            [disabled]="!selection.hasValue()"
-            mat-stroked-button
-            id="deleteButton"
-            class="btn-white btn-square bg-white ml-3.5">
-            <mat-icon>delete_outline</mat-icon> </button>
     </div>
+
     <div class="flex justify-center h-2/4">
         <div class="flex border-2 rounded">
-            <input type="text" class="px-4 py-2 w-80" placeholder="Tìm kiếm..." (keyup.enter)="onSearch()" [formControl]="keySearch">
-            <button (click) = "onSearch()" class="flex items-center justify-center px-4 border-l
+            <input type="text" class="px-4 py-2 w-80" placeholder="Tìm kiếm..." (keyup.enter)="onSearch()"
+                [formControl]="keySearch">
+            <button (click)="onSearch()" class="flex items-center justify-center px-4 border-l
                 hover:bg-gray-300 focus:outline-none focus:ring-2
                 focus:ring-offset-2 focus:ring-indigo-500">
-                <svg
-                    class="w-6 h-6 text-gray-600"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
+                <svg class="w-6 h-6 text-gray-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24">
                     <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42
                         1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12
@@ -51,39 +33,31 @@
     </div>
 
 </div>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
-    (matSortChange)="sortData($event)">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
-    <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()">
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [disabled]="true">
             </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()"
-                (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)" [disabled]="true">
             </mat-checkbox>
         </td>
     </ng-container>
 
-    <!-- Position Column -->
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
             text-xs text-gray-900
             uppercase tracking-wider" mat-sort-header="name"> Tên dịch vụ
         </th>
-        <!-- <td mat-cell *matCellDef="let element"> {{element.name}} </td> -->
         <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
             element">
             <div class="flex items-center">
                 <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 "
-                        [src]="element.banner"
-                        alt="">
+                    <img class="h-10 w-10 " [src]="element.banner" alt="">
                 </div>
                 <div class="ml-4">
                     <div class="text-sm font-medium
@@ -103,7 +77,6 @@
         <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
             element">
             <div class="text-sm text-gray-900">{{element.price}}</div>
-            <!-- <div class="text-sm text-gray-500 pt-1">{{element.verify}}</div> -->
         </td>
     </ng-container>
 
@@ -119,11 +92,19 @@
     </ng-container>
 
     <!-- Symbol Column -->
-    <ng-container matColumnDef="createDate">
+    <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
             text-xs text-gray-900
-            uppercase tracking-wider" mat-sort-header="create_date"> Ngày tạo </th>
-        <td mat-cell *matCellDef="let element"> {{element.createDate}} </td>
+            uppercase tracking-wider" mat-sort-header="create_date"> Trạng thái </th>
+        <td mat-cell *matCellDef="let element">
+            <span class="{{element.status == 'Đã cung cấp' ? 'px-2 inline-flex
+                text-xs
+                leading-5 font-semibold rounded-full
+                bg-green-100 text-green-800' : 'px-2 inline-flex text-xs
+                leading-5 font-semibold rounded-full
+                bg-red-200 text-green-800' }}" >
+                {{element.status}}
+            </span> </td>
     </ng-container>
 
     <ng-container matColumnDef="detail">
@@ -131,27 +112,23 @@
             text-xs text-gray-900
             uppercase tracking-wider">Chi tiết</th>
         <td mat-cell *matCellDef="let element">
-            <button
-                mat-icon-button
-                [matMenuTriggerFor]="editMenu"
-                #menuTrigger="matMenuTrigger"
-                (click)="menuTrigger.openMenu()"
-                (mouseenter)="menuTrigger.openMenu()">
+            <button mat-icon-button [matMenuTriggerFor]="editMenu" #menuTrigger="matMenuTrigger"
+                (click)="menuTrigger.openMenu()" (mouseenter)="menuTrigger.openMenu()">
                 <mat-icon class="white-icon">edit</mat-icon>
 
             </button>
-            <mat-menu #editMenu="matMenu" xPosition="before"
-                [overlapTrigger]="true">
+            <mat-menu #editMenu="matMenu" xPosition="before" [overlapTrigger]="true">
                 <span>
-                    <a
-                        mat-menu-item (click)="openDialogEditService(element.id,
+                    <a mat-menu-item (click)="openDialogEditService(element.id,
                         element.name)">
-                        Chỉnh sửa thông tin
+                        Xem thông tin
                     </a>
-                    <!-- <a mat-menu-item (click)="openDialogListEmployee(element.id,
-                        element.name)">
+
+                    <a mat-menu-item (click)="openDialogListEmployee(element.id,
+                    element.name)">
                         Xem danh sách nhân viên
-                    </a> -->
+                    </a>
+
                     <a mat-menu-item (click)="openDialoglistDiscountService(element.id,
                         element.name)">
                         Xem chương trình giảm giá

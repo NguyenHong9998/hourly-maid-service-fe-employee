@@ -12,28 +12,18 @@
         <div>
             <label for="phone" class="block text-sm
             font-bold text-gray-700">Nhân viên nghỉ việc</label>
-            <mat-form-field appearance="fill" class="pt-2" >
-                <mat-label>Chọn nhân viên</mat-label>
-                <mat-select [(ngModel)]="selectedValue" name="employee" (selectionChange)="selectEmployee($event)" disabled>
-                    <mat-option *ngFor="let employee of employees" [value]="employee.id">
-                        {{employee.name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-
-        <div class="flex items-center pt-3">
-            <div class="flex-shrink-0 h-12 w-12">
-                <img class="h-12 w-12 rounded-full" [src]="userAvatar" alt="" *ngIf="userAvatar">
-            </div>
-            <div class="ml-4">
-                <div class="text-sm font-medium text-gray-900">
-                    {{userName}}
+            <div class="flex items-center pt-3">
+                <div class="flex-shrink-0 h-12 w-12">
+                    <img class="h-12 w-12 rounded-full" [src]="userAvatar" alt="" *ngIf="userAvatar">
                 </div>
-
+                <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                        {{userName}}
+                    </div>
+    
+                </div>
             </div>
         </div>
-
     </div>
     <div class="pt-3">
         <label for="phone" class="block text-sm
@@ -43,7 +33,7 @@
             <div>
                 <mat-form-field appearance="fill" >
                     <mat-label>Chọn khoảng ngày</mat-label>
-                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker" disabled>
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [disabled] = "selectedValue != currentUser">
                         <input matStartDate formControlName="start" placeholder="Start date">
                         <input matEndDate formControlName="end" placeholder="End date">
                     </mat-date-range-input>
@@ -87,7 +77,7 @@
 
             <ng-container matColumnDef="delete">
                 <th mat-header-cell *matHeaderCellDef> Xoá</th>
-                <td mat-cell *matCellDef="let element"> <button mat-icon-button (click)="deleteRow(element.date)">
+                <td mat-cell *matCellDef="let element"> <button mat-icon-button (click)="deleteRow(element.date)" [disabled] = "selectedValue != currentUser">
                         <mat-icon class="white-icon">delete</mat-icon>
                     </button></td>
             </ng-container>
@@ -116,7 +106,7 @@
     <button class="bg-transparent hover:bg-blue-500 text-blue-700
         font-semibold hover:text-white py-2 px-4 border
         border-blue-500
-        hover:border-transparent rounded" id="saveButton" (click)="saveLeaveDate()">
+        hover:border-transparent rounded" id="saveButton" (click)="saveLeaveDate()" [disabled] = "selectedValue != currentUser">
         Lưu
     </button>
     <button mat-button (click)="onNoClick()" class="bg-white

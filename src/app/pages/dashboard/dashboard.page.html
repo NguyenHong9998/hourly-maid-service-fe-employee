@@ -211,56 +211,31 @@
           <h4>Tổng số khách hàng đánh giá</h4>
           <div class="grid grid-cols-2 gap-20">
             <div>
-              <h4 class="text-pink-700	">{{num_user}}</h4>
+              <h4 class="text-pink-700	">{{total_user}}</h4>
             </div>
 
           </div>
         </div>
       </div>
-      <div class="box box-1 bg-white pl-5">
-        <div class="pt-5
-         box-content f-d-col">
-          <h4>Nhân viên có mức đánh giá cao nhất</h4>
-          <div class="grid grid-cols-2 gap-5" *ngIf="max_user.avatar">
-            <div class="flex items-center">
-              <div class="flex-shrink-0 h-10 w-10">
-                <img class="h-10 w-10 rounded-full" [src]="max_user?.avatar" alt="">
-              </div>
-              <div class="ml-4">
-                <div class="text-sm font-medium
-                      text-gray-900">
-                  {{max_user?.name}}
-                </div>
-
-              </div>
-            </div>
-            <div class="pl-10 pt-2">
-              <span class="pb-1 txt-danger">{{max_user?.num_star}} (Sao)
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="box box-1 bg-white pl-5">
+      <div class="box box-1 bg-white pl-5 ">
         <div class="pt-5 box-content f-d-col">
-          <h4>Nhân viên có mức đánh giá thấp nhất</h4>
-          <div class="grid grid-cols-2 gap-5" *ngIf="min_user.avatar">
-            <div class="flex items-center">
-              <div class="flex-shrink-0 h-10 w-10">
-                <img class="h-10 w-10 rounded-full" [src]="min_user?.avatar" alt="">
-              </div>
-              <div class="ml-4">
-                <div class="text-sm font-medium
-                      text-gray-900">
-                  {{min_user?.name}}
-                </div>
+          <h4>Tổng số sao nhận được</h4>
+          <div class="grid grid-cols-2 gap-20">
+            <div>
+              <h4 class="text-pink-700	">{{total_star}}</h4>
+            </div>
 
-              </div>
+          </div>
+        </div>
+      </div>
+      <div class="box box-1 bg-white pl-5 ">
+        <div class="pt-5 box-content f-d-col">
+          <h4>Xếp hạng</h4>
+          <div class="grid grid-cols-2 gap-20">
+            <div>
+              <h4 class="text-pink-700	">{{position}}</h4>
             </div>
-            <div class="pl-10 pt-2">
-              <span class="pb-1 txt-danger">{{min_user?.num_star}} (Sao)
-              </span>
-            </div>
+
           </div>
         </div>
       </div>
@@ -285,7 +260,7 @@
                 </mat-form-field>
 
                 <div class="pt-2 pl-5">
-                  <button
+                  <button (click) = "getUserOverviewDetail()"
                     class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                     Xác nhận
                   </button>
@@ -293,10 +268,10 @@
               </div>
 
             </div>
-            <div class="chart-wrapper">
-              <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-                [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType"
-                [colors]="barChartColors">
+            <div class="pt-6 chart-box ">
+              <canvas baseChart width="400" height="400" [datasets]="lineChartDataEmployee"
+                [labels]="lineChartLabelsEmployee" [options]="lineChartOptions" [colors]="lineChartColors"
+                [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
               </canvas>
             </div>
           </div>

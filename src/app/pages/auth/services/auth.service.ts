@@ -25,7 +25,6 @@ export class AuthService {
     }
 
     login(loginForm: any): Observable<any> {
-        console.log("objetc: " + loginForm);
         return this.http.post(environment.apiUrl + "/auth/login", loginForm, this.httpOptions);
     }
 

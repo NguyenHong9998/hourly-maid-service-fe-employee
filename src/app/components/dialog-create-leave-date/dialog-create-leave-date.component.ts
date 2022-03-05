@@ -6,6 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { environment } from '@env/environment';
 import { CustomSnackbarService } from '@pages/auth/services/custom-snackbar.service';
+import { TokenStorageService } from '@pages/auth/services/token-storage.service';
 import { addDays, compareAsc, format } from 'date-fns';
 export class LeaveDate {
   id: number;
@@ -53,7 +54,7 @@ export class DialogCreateLeaveDateComponent implements OnInit {
   userName !: string;
 
   constructor(public dialogRef: MatDialogRef<DialogCreateLeaveDateComponent>, private formBuilder: FormBuilder,
-    private http: HttpClient, private customSnackBar: CustomSnackbarService
+    private http: HttpClient, private customSnackBar: CustomSnackbarService, private tokenStorage : TokenStorageService
   ) {
     this.row = this.getListLeaveDate(this.range.controls.start.value, this.range.controls.end.value);
     this.dataSource = new MatTableDataSource<LeaveDate>(this.row);
@@ -161,7 +162,7 @@ export class DialogCreateLeaveDateComponent implements OnInit {
   saveLeaveDate() {
     console.log(this.row);
 
-    const userId = this.selectedValue;
+    const userId = this.tokenStorage.getUser().user_id;
     const note = this.note;
     const array = new Array<LeaveDate>();
     for (let i = 0; i < this.row.length; i++) {

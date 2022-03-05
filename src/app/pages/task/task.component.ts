@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -12,12 +12,87 @@ import { DialogDoneTaskComponent } from '@components/dialog-done-task/dialog-don
 import { DialogTaskDetailComponent } from '@components/dialog-task-detail/dialog-task-detail.component';
 import { environment } from '@env/environment';
 import { CustomSnackbarService } from '@pages/auth/services/custom-snackbar.service';
+import { format } from 'date-fns';
 import { TaskListDomain } from './task.domain';
+
+
+@Component({
+    selector: "highlighted-work-dates",
+    template: `
+      <mat-card class="demo-inline-calendar-card">
+        <mat-calendar [(selected)]="selected" [dateClass]="dateClass" (selectedChange)="dateChanged($event)"></mat-calendar>
+      </mat-card>
+    `,
+    styleUrls: ["task.component.scss"],
+    encapsulation: ViewEncapsulation.None
+  })
+  export class HighlightedWorkDatesComponent {
+    private _orangeDatesArray !: Date[];
+    private _redDatesArray!: Date[];
+    selected = new Date() as any;
+  
+    @Output() dateChange = new EventEmitter<Date>();
+  
+    dateChanged(date: any) {
+      this.dateChange.emit(this.selected);
+    }
+  
+    @Input()
+    get orangeDatesArray(): Date[] {
+      return this._orangeDatesArray;
+    }
+  
+    set orangeDatesArray(d: Date[]) {
+      this._orangeDatesArray = d;
+      this._setupClassFunction();
+    }
+  
+    @Input()
+    get redDatesArray(): Date[] {
+      return this._redDatesArray;
+    }
+    set redDatesArray(d: Date[]) {
+      this._redDatesArray = d;
+    }
+  
+    dateClass!: (d: Date) => any;
+  
+    private _setupClassFunction() {
+      this.dateClass = (d: Date) => {
+  
+        let selected = false;
+        if (this._orangeDatesArray) {
+          selected = this._orangeDatesArray.some(
+            (item: Date) =>
+              item.getFullYear() === d.getFullYear() &&
+              item.getDate() === d.getDate() &&
+              item.getMonth() === d.getMonth()
+          );
+          if (selected) {
+            return selected ? "example-custom-date--orange-class " : undefined;
+          }
+          else if (this._redDatesArray) {
+  
+            selected = this._redDatesArray.some(
+              (item: Date) =>
+                item.getFullYear() === d.getFullYear() &&
+                item.getDate() === d.getDate() &&
+                item.getMonth() === d.getMonth()
+            );
+            return selected ? "example-custom-date--red-class " : undefined;
+          }
+        }
+        return undefined;
+      };
+    }
+  }
 
 @Component({
     selector: 'app-task',
     templateUrl: './task.component.html',
     styleUrls: ['./task.component.scss'],
+    encapsulation: ViewEncapsulation.None
+
 })
 export class TaskComponent implements OnInit {
 
@@ -36,6 +111,10 @@ export class TaskComponent implements OnInit {
     mapPageToken = new Map();
     status!: string;
     offset !: number;
+    orangeDatesArray: Date[] = [];
+    redDatesArray = [];
+  
+    currentSelectedDate = new Date();
 
     // statusList : string[] =['Đã tạo', 'Chưa giao NV', 'Hoàn thành', 'Đã huỷ'];
     statusList: any = [
@@ -71,6 +150,7 @@ export class TaskComponent implements OnInit {
     ngOnInit(): void {
         this.offset = 0;
         this.getListTasks();
+        this.getListWorkDate();
     }
 
 
@@ -152,8 +232,9 @@ export class TaskComponent implements OnInit {
             .set('status', status)
             .set('value_search', this.keySearch.value)
             .set('column_sort', this.sortObj && this.sortObj.direction ? this.sortObj.active.toUpperCase() : '')
+            .set('date', format(this.currentSelectedDate, "yyyy-MM-dd"))
             .set('type_sort', this.sortObj ? this.sortObj.direction.toUpperCase() : '');
-        this.http.get(environment.apiUrl + "/task", { params: params })
+        this.http.get(environment.apiUrl + "/task/employee", { params: params })
             .subscribe((res: any) => {
                 this.totalRow = res.total_rows;
                 this._prepareTaskList(res.data);
@@ -210,6 +291,19 @@ export class TaskComponent implements OnInit {
         })
     }
 
+    getListWorkDate() {
+        const listDate = new Array<Date>();
+        this.http.get(environment.apiUrl + "/task/calendar").subscribe((data: any) => {
+          const list = data.data;
+          console.log(data);
+          for (let i = 0; i < list.length; i++) {
+            listDate.push(new Date(list[i]));
+          }
+          this.orangeDatesArray = [...listDate];
+        })
+    
+      }
+    
     doneTask(taskId: any, status: any) {
         const data = { taskId };
         const dialogRef = this.dialog.open(DialogDoneTaskComponent, { data });

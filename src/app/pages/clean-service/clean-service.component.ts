@@ -8,6 +8,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogCreateServiceComponent } from '@components/dialog-create-service/dialog-create-service.component';
 import { DialogEditServiceComponent } from '@components/dialog-edit-service/dialog-edit-service.component';
+import { DialogEmployeeServiceInformComponent } from '@components/dialog-employee-service-inform/dialog-employee-service-inform.component';
 import { DialogListDiscountServiceComponent } from '@components/dialog-list-discount-service/dialog-list-discount-service.component';
 import { DialogListEmployeeServiceComponent } from '@components/dialog-list-employee-service/dialog-list-employee-service.component';
 import { environment } from '@env/environment';
@@ -22,7 +23,7 @@ import { CleanServiceListDomain } from './clean-service-list.domain';
 export class CleanServiceComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  displayedColumns: string[] = ['select', 'name', 'price', 'note', 'createDate', 'detail'];
+  displayedColumns: string[] = ['select', 'name', 'price', 'note', 'status', 'detail'];
   selection = new SelectionModel<any>(true, []);
 
   dataSource!: MatTableDataSource<CleanServiceListDomain>;
@@ -50,7 +51,7 @@ export class CleanServiceComponent implements OnInit {
     this.getListService();
   }
 
-  
+
 
   getListService() {
 
@@ -86,7 +87,8 @@ export class CleanServiceComponent implements OnInit {
         const banner = data[i].banner;
         const price = data[i].price;
         const createDate = data[i].create_date;
-        const domain = new CleanServiceListDomain(id, position, name, banner, price, note, createDate);
+        const status = data[i].status;
+        const domain = new CleanServiceListDomain(id, position, name, banner, price, note, createDate, status);
 
         result.push(domain);
       }
@@ -118,11 +120,11 @@ export class CleanServiceComponent implements OnInit {
   clearSort() {
     this.sort.sort({ id: '', start: 'asc', disableClear: false });
     this.sortObj = {
-        active: '',
-        direction: '',
+      active: '',
+      direction: '',
     };
     this.paginator.pageIndex = 0;
-}
+  }
 
 
 
@@ -150,7 +152,7 @@ export class CleanServiceComponent implements OnInit {
 
   openDialogListEmployee(serviceId: string, serviceName: string) {
     const data = { serviceId, serviceName };
-    const dialogRef = this.dialog.open(DialogListEmployeeServiceComponent, { data });
+    const dialogRef = this.dialog.open(DialogEmployeeServiceInformComponent, { data });
 
     dialogRef.afterClosed().subscribe(() => {
       console.log('The dialog was closed');
@@ -181,5 +183,13 @@ export class CleanServiceComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       console.log('The dialog was closed');
     });
+  }
+
+  setExperence() {
+    const dialogref = this.dialog.open(DialogListEmployeeServiceComponent);
+    dialogref.afterClosed().subscribe(() => {
+
+    })
+
   }
 }

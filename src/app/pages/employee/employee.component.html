@@ -6,17 +6,7 @@
         </h2>
     </div>
     <div class="flex h-32 md:h-auto md:w-2/3 gap-2">
-        <a href="/employee/list" matTooltip="Tải lại trang" mat-stroked-button class="btn-white btn-square bg-white">
-            <mat-icon>sync</mat-icon>
-        </a>
-        <button id="addButton" matTooltip="Thêm mới nhân viên" mat-stroked-button
-            class="btn-white btn-square bg-white ml-3" (click)="openDialogCreateEmployee()">
-            <mat-icon>person_add</mat-icon>
-        </button>
-        <button matTooltip="Xóa nhân viên" [disabled]="!selection.hasValue()" mat-stroked-button
-            class="btn-white btn-square bg-white ml-3">
-            <mat-icon>delete_outline</mat-icon>
-        </button>
+       
         <mat-button-toggle-group [(ngModel)]="status" (change)="onFilter()">
             <mat-button-toggle value="Quản lý">Quản lý</mat-button-toggle>
             <mat-button-toggle value="Nhân viên">Nhân viên</mat-button-toggle>
@@ -44,28 +34,25 @@
 </div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
-    <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [disabled]="true">
             </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)">
+                [checked]="selection.isSelected(row)" [disabled]="true">
             </mat-checkbox>
         </td>
     </ng-container>
 
-    <!-- Position Column -->
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
             text-xs text-gray-900
             uppercase tracking-wider" mat-sort-header="name"> Họ và tên
         </th>
-        <!-- <td mat-cell *matCellDef="let element"> {{element.name}} </td> -->
-        <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
+         <td class="px-6 py-4 whitespace-nowrap" mat-cell *matCellDef="let
             element">
             <div class="flex items-center">
                 <div class="flex-shrink-0 h-10 w-10">
@@ -105,14 +92,12 @@
                 leading-5 font-semibold rounded-full
                 bg-green-100 text-green-800' : 'px-2 inline-flex text-xs
                 leading-5 font-semibold rounded-full
-                bg-red-200 text-green-800' }}" (click)="openDialogBlockEmployee(element.id,
-                element.name, element.avatar, element.status)">
+                bg-red-200 text-green-800' }}" >
                 {{element.status}}
             </span>
         </td>
     </ng-container>
 
-    <!-- Symbol Column -->
     <ng-container matColumnDef="role">
         <th mat-header-cell *matHeaderCellDef class="px-6 py-3 text-left
             text-xs text-gray-900
@@ -139,13 +124,12 @@
                 <span>
                     <a mat-menu-item (click)="openDialogEmployeeInfor(element.id,
                     element.name)">
-                        Chỉnh sửa thông tin
+                        Xem thông tin
                     </a>
                     <a mat-menu-item (click)="openDialogFeedbackOfEmployee(element.id,
                     element.name)">
                         Xem phản hồi người dùng
                     </a>
-
                 </span>
             </mat-menu>
         </td>
