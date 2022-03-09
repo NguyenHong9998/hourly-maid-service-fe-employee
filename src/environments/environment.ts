@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:9899/api/v1',
+  apiUrl: 'https://hourly-maid-service.herokuapp.com/api/v1',
 };
 
 /*
