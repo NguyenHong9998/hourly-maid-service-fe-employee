@@ -14,7 +14,7 @@
 </div>
 <mat-dialog-content class="mat-typography" *ngIf="!isLoading">
 
-    <div class="rounded-md bg-red-50 p-4" *ngIf="status == 'Đã tạo'">
+    <!-- <div class="rounded-md bg-red-50 p-4" *ngIf="status == 'Đã tạo'">
         <div class="flex">
             <div class="flex-shrink-0">
                 <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -34,7 +34,7 @@
                 </p>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="border-t border-gray-200  py-5">
         <form>
@@ -114,13 +114,13 @@
                             </div>
                         </div>
 
-                        <div class="pl-10">
+                        <!-- <div class="pl-10">
                             <label class="block text-sm font-bold pb-3">Số lượng nhân viên</label>
                             <input [(ngModel)]="numberOfemployee" name="numberOfemployee" type="number" id="in" class="w-full px-4 py-2 text-sm border
                                             rounded-md focus:border-blue-400
                                             focus:outline-none focus:ring-1
                                             focus:ring-blue-600" disabled>
-                        </div>
+                        </div> -->
                     </div>
                     <label for="phone" class="block text-sm
                     font-bold ">Thời giam làm việc</label>
@@ -195,7 +195,7 @@
                 </table>
             </div>
 
-            <div class="bg-white px-4 py-5 sm:grid
+            <!-- <div class="bg-white px-4 py-5 sm:grid
                                             sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium">
                     Tổng số nhân viên: {{numberOfemployee}}
@@ -203,7 +203,7 @@
                 <dd>
                     <span>Tổng cộng: </span> <strong class="font-bold">{{getTotalMoney()}} (VNĐ)</strong>
                 </dd>
-            </div>
+            </div> -->
 
         </div>
 
